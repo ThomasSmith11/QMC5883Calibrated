@@ -33,4 +33,5 @@ QMC5883LCompass::rawReading QMC5883LCompass::getRawData() {
   data.z = Wire.read();
   data.z |= Wire.read() << 8;
   Wire.endTransmission();
+  return data;
 }

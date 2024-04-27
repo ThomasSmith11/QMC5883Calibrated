@@ -11,7 +11,7 @@ for i, port in enumerate(ports, start=1):
             print(f"{i}. {port.device}: {port.description}")
 
 choice = int(input("Enter the number of the serial port you want to use: "))
-port = str(ports[choice-1]).split(" ")[0]
+port = ports[choice-1].device
 
 ser = serial.Serial(port, baudrate)
 
@@ -26,16 +26,19 @@ while True:
     line = proc.stdout.readline().decode()
     if not line:
       break
-    if "dataClient(Foundation)[73350] <Notice>: " in line:
+    if "dataClient(Foundation)" in line:
       ser.write(b"send\n")
       compassData = ser.readline().decode().strip().split(",")
       heading = line.split(" ")[-1].strip()
       csvRow = [heading]+compassData
+      print(heading+','+','.join(compassData))
       writer.writerow(csvRow)
   except KeyboardInterrupt:
-    print("Closing")
-  finally:
+    print("Closing Serial")
     ser.close()
+    print("Closing CSV")
     f.close()
+    proc.kill()
+    break
     
 
