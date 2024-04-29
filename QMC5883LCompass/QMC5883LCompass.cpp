@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <Wire.h>
 #include <QMC5883LCompass.h>
+#include <model.h>
 
 
 QMC5883LCompass::QMC5883LCompass() {}
@@ -19,6 +20,13 @@ void QMC5883LCompass::writeRegister(uint8_t reg, uint8_t val) {
 
 void QMC5883LCompass::setMode(uint8_t sampleMode, uint8_t outputDataRate, uint8_t fieldRange, uint8_t overSampleRate) {
   writeRegister(0x09, sampleMode | outputDataRate<<2 | fieldRange<<4 | overSampleRate<<6);
+}
+
+int QMC5883LCompass::azimuth() {
+    data = getRawData();
+    Eloquent::ML::Port::Model model;
+    int features[3] = {data.x, data.y, data.z};
+    return model.predict(features);
 }
 
 

@@ -39,6 +39,7 @@ public:
   void initialize();
   void setMode(uint8_t sampleMode, uint8_t outputDataRate, uint8_t fieldRange, uint8_t overSampleRate);
   rawReading getRawData();
+  int azimuth();
 
 private:
   rawReading data;

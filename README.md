@@ -10,6 +10,5 @@ This library explores using machine learning to compensate for tilt specifically
 5. Install libimobiledevice (brew or apt install libimobiledevice)
 6. Install pyserial (pip install pyserial)
 7. Run dataCollector.py with everything connected to your computer and move the plank around tilting it every way possible to generate your data
-8. Train your model using the provided ...
-9. Load your model into a header file using the provided ...
-10. Use the model as shown in example_usage.ino
+8. Train your model using the provided jupyter notebook, located in QMCModelTrainer
+9. Use the model as shown in example_usage.ino
