@@ -17,7 +17,7 @@ ser = serial.Serial(port, baudrate)
 
 proc = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE)
 
-f = open("compassAndHeadingData.csv", "w")
+f = open("../QMCModelTrainer/compassAndHeadingData.csv", "w")
 writer = csv.writer(f)
 writer.writerow(["Heading", "X", "Y", "Z"])
 
