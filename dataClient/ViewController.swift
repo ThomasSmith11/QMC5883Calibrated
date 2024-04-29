@@ -3,6 +3,8 @@ import CoreLocation
 
 class ViewController: UIViewController, CLLocationManagerDelegate {
 
+    let samplesPerSecond = 100
+    
     @IBOutlet weak var startButton: UIButton!
 
     let locationManager = CLLocationManager()
@@ -27,7 +29,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         isSendingData = true
         startButton.setTitle("Stop", for: .normal)
         // Start timer to send compass heading every 200ms
-        timer = Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(sendCompassHeading), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: 1/samplesPerSecond, target: self, selector: #selector(sendCompassHeading), userInfo: nil, repeats: true)
     }
 
     func stopSendingData() {
