@@ -28,8 +28,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     func startSendingData() {
         isSendingData = true
         startButton.setTitle("Stop", for: .normal)
-        // Start timer to send compass heading every 200ms
-        timer = Timer.scheduledTimer(timeInterval: 1/samplesPerSecond, target: self, selector: #selector(sendCompassHeading), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: TimeInterval(1/samplesPerSecond), target: self, selector: #selector(sendCompassHeading), userInfo: nil, repeats: true)
     }
 
     func stopSendingData() {
@@ -41,7 +40,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
 
     @objc func sendCompassHeading() {
         if let magneticHeading = locationManager.heading?.magneticHeading {
-            NSLog("%f", magneticHeading)
+            NSLog("%d", Int(magneticHeading))
         }
     }
 }
