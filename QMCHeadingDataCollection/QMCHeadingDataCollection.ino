@@ -7,7 +7,7 @@ void setup() {
   Wire.begin();
   Serial.begin(9600);
   compass.initialize();
-  compass.setMode(continuous, odr100, rng8, osr512);
+  compass.setMode(continuous, odr50, rng8, osr512);
 }
  
 void loop() {
@@ -19,6 +19,8 @@ void loop() {
     Serial.print(",");
     Serial.print(data.y);
     Serial.print(",");
-    Serial.println(data.z);
+    Serial.print(data.z);
+    Serial.print(",");
+    Serial.println(atan2(data.y, data.x));
   }
 }

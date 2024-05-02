@@ -23,9 +23,10 @@ void QMC5883LCompass::setMode(uint8_t sampleMode, uint8_t outputDataRate, uint8_
 }
 
 int QMC5883LCompass::azimuth() {
-    data = getRawData();
-    Eloquent::ML::Port::Model model;
-    int features[3] = {data.x, data.y, data.z};
+    getRawData();
+    Model model;
+    float YXatan = atan2(data.y, data.x);
+    float features[4] = {data.x, data.y, data.z, YXatan};
     return model.predict(features);
 }
 
