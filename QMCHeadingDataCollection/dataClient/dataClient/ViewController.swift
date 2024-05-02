@@ -2,9 +2,8 @@ import UIKit
 import CoreLocation
 
 class ViewController: UIViewController, CLLocationManagerDelegate {
-
-    let samplesPerSecond = 100
     
+    @IBOutlet weak var headingLabel: UILabel!
     @IBOutlet weak var startButton: UIButton!
 
     let locationManager = CLLocationManager()
@@ -15,6 +14,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         super.viewDidLoad()
         locationManager.delegate = self
         locationManager.startUpdatingHeading()
+        locationManager.requestWhenInUseAuthorization()
     }
 
     @IBAction func startButtonTapped(_ sender: UIButton) {
@@ -27,20 +27,39 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
 
     func startSendingData() {
         isSendingData = true
-        startButton.setTitle("Stop", for: .normal)
-        timer = Timer.scheduledTimer(timeInterval: TimeInterval(1/samplesPerSecond), target: self, selector: #selector(sendCompassHeading), userInfo: nil, repeats: true)
+        let attrTitle = NSAttributedString(string: "Stop", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 50)])
+        startButton.setAttributedTitle(attrTitle, for: UIControl.State.normal)
+        timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(sendCompassHeading), userInfo: nil, repeats: true)
     }
 
     func stopSendingData() {
         isSendingData = false
-        startButton.setTitle("Start", for: .normal)
+        let attrTitle = NSAttributedString(string: "Start", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 50)])
+        startButton.setAttributedTitle(attrTitle, for: UIControl.State.normal)
         timer?.invalidate()
         timer = nil
     }
 
     @objc func sendCompassHeading() {
-        if let magneticHeading = locationManager.heading?.magneticHeading {
-            NSLog("%d", Int(magneticHeading))
+        guard let magneticHeading = locationManager.heading?.magneticHeading else {
+            NSLog("Failed to obtain heading.")
+            return
         }
+        NSLog("%d", Int(magneticHeading))
+        updateHeadingLabel(magneticHeading: magneticHeading)
+    }
+
+    func updateHeadingLabel(magneticHeading: CLLocationDirection) {
+        headingLabel.text = "\(Int(magneticHeading))°"
+    }
+
+    func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
+        if !isSendingData {
+            updateHeadingLabel(magneticHeading: newHeading.magneticHeading)
+        }
+    }
+
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        NSLog("Location manager failed with error: \(error.localizedDescription)")
     }
 }
